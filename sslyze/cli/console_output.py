@@ -40,7 +40,7 @@ class ObserverToGenerateConsoleOutput(ScannerObserver):
         for bad_server_str in parsed_command_line.invalid_servers:
             self._file_to.write(
                 f"   {bad_server_str.server_string:<35} => ERROR: {bad_server_str.error_message};"
-                f" discarding scan.\n"
+                " discarding scan.\n"
             )
 
     def server_connectivity_test_error(
