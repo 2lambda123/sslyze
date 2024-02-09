@@ -55,8 +55,7 @@ class ObserverToGenerateConsoleOutput(ScannerObserver):
         self, server_scan_request: ServerScanRequest, connectivity_result: ServerTlsProbingResult
     ) -> None:
         client_auth_msg = ""
-        client_auth_requirement = connectivity_result.client_auth_requirement
-        if client_auth_requirement == ClientAuthRequirementEnum.REQUIRED:
+        if (client_auth_requirement := connectivity_result.client_auth_requirement) == ClientAuthRequirementEnum.REQUIRED:
             client_auth_msg = "  WARNING: Server REQUIRED client authentication, specific plugins will fail."
         elif client_auth_requirement == ClientAuthRequirementEnum.OPTIONAL:
             client_auth_msg = "  WARNING: Server requested optional client authentication"
