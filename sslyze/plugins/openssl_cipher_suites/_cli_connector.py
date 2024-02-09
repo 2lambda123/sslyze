@@ -23,7 +23,7 @@ class _CipherSuitesCliConnector(ScanCommandCliConnector["CipherSuitesScanResult"
             result_as_txt.append(
                 cls._format_subtitle(
                     f"Attempted to connect using {cipher_suites_count} cipher suites;"
-                    f" the server rejected all cipher suites."
+                    " the server rejected all cipher suites."
                 )
             )
             return result_as_txt

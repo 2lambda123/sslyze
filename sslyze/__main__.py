@@ -105,7 +105,7 @@ def main() -> None:
 
         print(
             f'    Checking results against Mozilla\'s "{parsed_command_line.check_against_mozilla_config}"'
-            f" configuration. See https://ssl-config.mozilla.org/ for more details.\n"
+            " configuration. See https://ssl-config.mozilla.org/ for more details.\n"
         )
         mozilla_checker = MozillaTlsConfigurationChecker.get_default()
         for server_scan_result in all_server_scan_results:
@@ -127,7 +127,7 @@ def main() -> None:
                 are_all_servers_compliant = False
                 print(
                     f"    {server_scan_result.server_location.display_string}: ERROR - Scan did not run successfully;"
-                    f" review the scan logs above."
+                    " review the scan logs above."
                 )
 
     if not are_all_servers_compliant:
