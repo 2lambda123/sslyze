@@ -171,8 +171,7 @@ def _check_tls_curves(
     else:
         supported_curves = set()
 
-    tls_curves_difference = supported_curves - mozilla_config.tls_curves
-    if tls_curves_difference:
+    if tls_curves_difference := supported_curves - mozilla_config.tls_curves:
         issues_with_tls_curves[
             "tls_curves"
         ] = f"TLS curves {tls_curves_difference} are supported, but should be rejected."
@@ -250,20 +249,17 @@ def _check_tls_versions_and_ciphers(
 
     # Then check the results
     issues_with_tls_ciphers = {}
-    tls_versions_difference = tls_versions_supported - mozilla_config.tls_versions
-    if tls_versions_difference:
+    if tls_versions_difference := tls_versions_supported - mozilla_config.tls_versions:
         issues_with_tls_ciphers[
             "tls_versions"
         ] = f"TLS versions {tls_versions_difference} are supported, but should be rejected."
 
-    tls_1_3_cipher_suites_difference = tls_1_3_cipher_suites_supported - mozilla_config.ciphersuites
-    if tls_1_3_cipher_suites_difference:
+    if tls_1_3_cipher_suites_difference := tls_1_3_cipher_suites_supported - mozilla_config.ciphersuites:
         issues_with_tls_ciphers[
             "ciphersuites"
         ] = f"TLS 1.3 cipher suites {tls_1_3_cipher_suites_difference} are supported, but should be rejected."
 
-    cipher_suites_difference = cipher_suites_supported - mozilla_config.ciphers.iana
-    if cipher_suites_difference:
+    if cipher_suites_difference := cipher_suites_supported - mozilla_config.ciphers.iana:
         issues_with_tls_ciphers[
             "ciphers"
         ] = f"Cipher suites {cipher_suites_difference} are supported, but should be rejected."

@@ -64,8 +64,7 @@ def _open_socket_for_connection_via_http_proxy(
         )
 
         # Send a CONNECT request with the host we want to tunnel to
-        proxy_authorization_header = server_location.http_proxy_settings.proxy_authorization_header
-        if proxy_authorization_header is None:
+        if (proxy_authorization_header := server_location.http_proxy_settings.proxy_authorization_header) is None:
             sock.send(f"CONNECT {server_location.hostname}:{server_location.port} HTTP/1.1\r\n\r\n".encode("utf-8"))
         else:
             sock.send(

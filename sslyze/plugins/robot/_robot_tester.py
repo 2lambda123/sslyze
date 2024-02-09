@@ -191,11 +191,10 @@ def test_robot(server_info: ServerConnectivityInfo) -> Dict[RobotPmsPaddingPaylo
 
     # TODO(AD): The following section was taken from the original ROBOT poc script but makes the scans really slow as it
     # waits for server timeouts
-    robot_result_enum = RobotServerResponsesAnalyzer(
-        {payload_enum: [response] for payload_enum, response in server_responses_per_robot_payloads.items()}, 1
-    ).compute_result_enum()
 
-    if robot_result_enum == RobotScanResultEnum.NOT_VULNERABLE_NO_ORACLE:
+    if (robot_result_enum := RobotServerResponsesAnalyzer(
+        {payload_enum: [response] for payload_enum, response in server_responses_per_robot_payloads.items()}, 1
+    ).compute_result_enum()) == RobotScanResultEnum.NOT_VULNERABLE_NO_ORACLE:
         # Try again but this time do not finish the TLS handshake - for some servers it will reveal an oracle
         robot_should_complete_handshake = False
         server_responses_per_robot_payloads = _run_oracle_detection(

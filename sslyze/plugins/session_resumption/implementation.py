@@ -109,8 +109,7 @@ class _SessionResumptionSupportCliConnector(
         # Check if --resum_attempts was used
         extra_arguments = None
         try:
-            resum_attempts = parsed_command_line["resum_attempts"]
-            if resum_attempts:
+            if resum_attempts := parsed_command_line["resum_attempts"]:
                 try:
                     resum_attempts_as_int = int(resum_attempts)
                     extra_arguments = SessionResumptionSupportExtraArgument(

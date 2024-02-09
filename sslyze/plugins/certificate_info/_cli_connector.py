@@ -55,8 +55,7 @@ class _CertificateInfoCliConnector(
         # Check if --certinfo_ca_file was used
         extra_arguments = None
         try:
-            certinfo_ca_file = parsed_command_line["certinfo_ca_file"]
-            if certinfo_ca_file:
+            if certinfo_ca_file := parsed_command_line["certinfo_ca_file"]:
                 if not isinstance(certinfo_ca_file, str):
                     raise TypeError(f"Expected a str for certinfo_ca_file but received {certinfo_ca_file}")
                 extra_arguments = CertificateInfoExtraArgument(custom_ca_file=Path(certinfo_ca_file))
@@ -194,8 +193,7 @@ class _CertificateInfoCliConnector(
         deployment_as_txt.append(cls._format_field("OCSP Must-Staple:", must_staple_txt))
 
         # Look for SCT extension
-        scts_count = cert_deployment.leaf_certificate_signed_certificate_timestamps_count
-        if scts_count is None:
+        if (scts_count := cert_deployment.leaf_certificate_signed_certificate_timestamps_count) is None:
             sct_txt = "OK - Extension present"
         elif scts_count == 0:
             sct_txt = "NOT SUPPORTED - Extension not found"
@@ -329,8 +327,7 @@ def _get_issuer_as_short_text(certificate: Certificate) -> str:
 def _get_name_as_short_text(name_field: x509.Name) -> str:
     """Convert a name field returned by the cryptography module to a string suitable for displaying it to the user."""
     # Name_field is supposed to be a Subject or an Issuer; print the CN if there is one
-    common_names = get_common_names(name_field)
-    if common_names:
+    if common_names := get_common_names(name_field):
         # We don't support certs with multiple CNs
         return common_names[0]
     else:
