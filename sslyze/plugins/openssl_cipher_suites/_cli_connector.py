@@ -16,6 +16,20 @@ class _CipherSuitesCliConnector(ScanCommandCliConnector["CipherSuitesScanResult"
 
     @classmethod
     def result_to_console_output(cls, result: "CipherSuitesScanResult") -> List[str]:
+        """This function takes in a CipherSuitesScanResult object and returns a list of strings that represent the result in a formatted way for console output.
+        Parameters:
+            - cls (class): The class object.
+            - result (CipherSuitesScanResult): The result object that contains information about the cipher suites.
+        Returns:
+            - List[str]: A list of strings that represent the result in a formatted way for console output.
+        Processing Logic:
+            - Formats the title and subtitle of the output.
+            - Checks if any cipher suites were accepted or rejected by the server.
+            - If all cipher suites were rejected, returns a message stating that.
+            - If any cipher suites were accepted, displays the accepted cipher suites and some general comments about the cipher suite configuration.
+            - For TLS versions below 1.3, checks if the cipher suites support forward secrecy and if any insecure RC4 cipher suites are supported.
+            - Returns the formatted output as a list of strings."""
+        
         result_as_txt = [cls._format_title(cls._title_in_output)]
 
         cipher_suites_count = len(result.accepted_cipher_suites) + len(result.rejected_cipher_suites)
@@ -79,6 +93,21 @@ class _CipherSuitesCliConnector(ScanCommandCliConnector["CipherSuitesScanResult"
 def _format_accepted_cipher_suite(accepted_cipher: CipherSuiteAcceptedByServer) -> str:
     eph_key = accepted_cipher.ephemeral_key
     if isinstance(eph_key, EcDhEphemeralKeyInfo):
+        """Format accepted cipher suite for display.
+        Parameters:
+            - accepted_cipher (CipherSuiteAcceptedByServer): The accepted cipher suite object.
+        Returns:
+            - str: The formatted cipher suite for display.
+        Processing Logic:
+            - Get the ephemeral key from the accepted cipher suite.
+            - If the ephemeral key is an EcDhEphemeralKeyInfo object, format the ECDH information.
+            - If the ephemeral key is a DhEphemeralKeyInfo object, format the DH information.
+            - Otherwise, leave the DH information blank.
+            - Return the formatted cipher suite for display.
+        Example:
+            _format_accepted_cipher_suite(accepted_cipher)
+            # "        cipher_suite_name                           key_size  ECDH: curve_name (size bits)""""
+        
         dh_info = f"ECDH: {eph_key.curve_name} ({eph_key.size} bits)"
     elif isinstance(eph_key, DhEphemeralKeyInfo):
         dh_info = f"DH ({eph_key.size} bits)"

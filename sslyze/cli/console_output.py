@@ -22,6 +22,18 @@ from sslyze.server_setting import (
 
 class ObserverToGenerateConsoleOutput(ScannerObserver):
     def __init__(self, file_to: TextIO, json_path_out: Optional[Path] = None) -> None:
+        """"Initializes the class with the provided file object and optional JSON output path."
+        Parameters:
+            - file_to (TextIO): The file object to read from.
+            - json_path_out (Optional[Path]): Optional path to write the JSON output to.
+        Returns:
+            - None: Does not return any value.
+        Processing Logic:
+            - Initializes the class with file object.
+            - Sets the start date for the scans.
+            - Stores the optional JSON output path.
+            - Prints the path where the JSON output was written, if provided."""
+        
         self._file_to = file_to
         self._date_scans_started = datetime.utcnow()
 
@@ -30,9 +42,29 @@ class ObserverToGenerateConsoleOutput(ScannerObserver):
 
     @classmethod
     def _format_title(cls, title: str) -> str:
+        """Function to format a title string by capitalizing it and adding a line of dashes underneath.
+        Parameters:
+            - title (str): The title string to be formatted.
+        Returns:
+            - str: The formatted title string.
+        Processing Logic:
+            - Capitalize the title string.
+            - Add a line of dashes underneath.
+            - Return the formatted title string."""
+        
         return f" {title.upper()}\n {'-' * len(title)}\n"
 
     def command_line_parsed(self, parsed_command_line: ParsedCommandLine) -> None:
+        """Checks the connectivity to the server(s) provided in the command line and writes the results to a file.
+        Parameters:
+            - parsed_command_line (ParsedCommandLine): An object containing the parsed command line arguments.
+        Returns:
+            - None: This function does not return anything.
+        Processing Logic:
+            - Write the title to the file.
+            - Loop through the invalid servers.
+            - Write the server string and error message to the file."""
+        
         self._file_to.write("\n")
         self._file_to.write(self._format_title("Checking connectivity to server(s)"))
         self._file_to.write("\n")
@@ -45,6 +77,18 @@ class ObserverToGenerateConsoleOutput(ScannerObserver):
 
     def server_connectivity_test_error(
         self, server_scan_request: ServerScanRequest, connectivity_error: ConnectionToServerFailed
+        """This function checks for errors in server connectivity during a server scan request.
+        Parameters:
+            - server_scan_request (ServerScanRequest): The server scan request to be checked.
+            - connectivity_error (ConnectionToServerFailed): The error that occurred during the server scan request.
+        Returns:
+            - None: This function does not return anything.
+        Processing Logic:
+            - Checks for errors in server connectivity.
+            - Writes an error message to a file.
+            - Discards the server scan request.
+            - Only used during server scan requests."""
+        
     ) -> None:
         self._file_to.write(
             f"   {connectivity_error.server_location.display_string:<25}"
@@ -53,6 +97,8 @@ class ObserverToGenerateConsoleOutput(ScannerObserver):
 
     def server_connectivity_test_completed(
         self, server_scan_request: ServerScanRequest, connectivity_result: ServerTlsProbingResult
+        """"""
+        
     ) -> None:
         client_auth_msg = ""
         client_auth_requirement = connectivity_result.client_auth_requirement
@@ -66,6 +112,8 @@ class ObserverToGenerateConsoleOutput(ScannerObserver):
         self._file_to.write(f"   {server_location.display_string:<25} => {network_route} {client_auth_msg}\n")
 
     def server_scan_completed(self, server_scan_result: ServerScanResult) -> None:
+        """"""
+        
         if server_scan_result.scan_status != ServerScanStatusEnum.COMPLETED:
             # Nothing to print here if the scan was not completed
             return
@@ -100,6 +148,8 @@ class ObserverToGenerateConsoleOutput(ScannerObserver):
         self._file_to.write("\n\n" + self._format_title(scan_txt) + scan_command_results_str)
 
     def all_server_scans_completed(self) -> None:
+        """"""
+        
         scans_duration = datetime.utcnow() - self._date_scans_started
         self._file_to.write("\n")
         self._file_to.write(
@@ -110,6 +160,8 @@ class ObserverToGenerateConsoleOutput(ScannerObserver):
 
 
 def _server_location_to_network_route(server_location: ServerNetworkLocation) -> str:
+    """"""
+    
     if server_location.connection_type == ConnectionTypeEnum.VIA_HTTP_PROXY:
         # We do not know the server's IP address if going through a proxy
         assert server_location.http_proxy_settings
@@ -126,6 +178,8 @@ def _server_location_to_network_route(server_location: ServerNetworkLocation) ->
 
 def scan_command_error_as_console_output(
     server_location: ServerNetworkLocation, scan_command: ScanCommand, scan_command_attempt: ScanCommandAttempt
+    """"""
+    
 ) -> str:
     if not scan_command_attempt.error_trace:
         raise ValueError("Should never happen")
