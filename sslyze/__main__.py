@@ -21,6 +21,35 @@ from sslyze.mozilla_tls_profile.mozilla_config_checker import (
 
 
 def main() -> None:
+    """Runs a TLS security scan on the specified servers and checks the results against the Mozilla TLS configuration.
+    Parameters:
+        - parsed_command_line (CommandLine): The parsed command line arguments for the scan.
+        - sys (module): The system module used for printing output.
+        - datetime (module): The datetime module used for recording the start and end times of the scan.
+        - Scanner (class): The Scanner class used for performing the scan.
+        - ServerScanRequest (class): The ServerScanRequest class used for queuing scan requests.
+        - ServerScanResult (class): The ServerScanResult class used for storing the results of the scan.
+        - ObserverToGenerateConsoleOutput (class): The ObserverToGenerateConsoleOutput class used for printing output to the console.
+        - SslyzeOutputAsJson (class): The SslyzeOutputAsJson class used for formatting the scan results as JSON.
+        - InvalidServerStringAsJson (class): The InvalidServerStringAsJson class used for formatting invalid server strings as JSON.
+        - MozillaTlsConfigurationChecker (class): The MozillaTlsConfigurationChecker class used for checking the results against the Mozilla TLS configuration.
+    Returns:
+        - None: The function does not return any value.
+    Processing Logic:
+        - Parses the command line arguments using the CommandLineParser class.
+        - Sets up an observer to print the results to the console, if needed.
+        - Sets up the Scanner class with the specified parameters.
+        - Queues the scan requests for the specified servers.
+        - Runs the scan and stores the results in the ServerScanResult class.
+        - Writes the results to a JSON file if needed.
+        - Checks the results against the Mozilla TLS configuration if specified.
+        - Prints the results to the console.
+        - Returns a non-zero error code if any of the servers are not compliant with the Mozilla TLS configuration.
+    Example:
+        main()
+        # Runs a TLS security scan on the specified servers and checks the results against the Mozilla TLS configuration.
+        # Prints the results to the console and returns a non-zero error code if any of the servers are not compliant with the Mozilla TLS configuration."""
+    
     # Parse the supplied command line
     date_scans_started = datetime.utcnow()
     sslyze_parser = CommandLineParser(__version__)
